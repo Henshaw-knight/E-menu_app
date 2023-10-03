@@ -1,0 +1,73 @@
+{% extends 'customer/base.html' %}
+
+{% block content %}
+<div class="container mb-5">
+  <div class="row justify-content-center mt-1">
+    <div class="col-md-5 col-sm-12 p-4 text-center">
+      <h1>Order Submitted!</h1>
+      <p>You should receive a confirmation email soon.</p>
+      <a href="{% url 'index' %}">Go to the homepage</a>
+    </div>
+  </div>
+
+  <div class="row justify-content-center mt-5">
+    <div class="col-md-5 col-sm-12 text-center">
+      <h3 class="pb-3">Order Summary:</h3>
+      {% for item in items.all %}
+      <p>{{ item.name }} <span class="pl-3">{{ item.price }}</span> <i>each</i></p>
+      {% endfor %}
+
+      <p class="font-weight-bold pt-4">Total: NGN {{ price }}</p>
+    </div>
+  </div>
+  <div class="row justify-content-center pb-2 pt-5">
+    <div class="col-md-6 text-center">
+      <h3>Pay Now or Pay With Cash At Delivery</h3>
+    </div>
+  </div>
+  <form action="" id="paymentForm">
+  <div class="row justify-content-center pb-5">
+    <div class="col-md-6 text-center">
+      <button class="btn btn-primary" type="submit" onclick="payWithPaystack()"> Make Payment </button>
+    </div>
+  </div>
+  </form>
+</div>
+
+<script src="https://js.paystack.co/v1/inline.js"></script>
+
+<script>
+
+
+  let paymentData = {
+    'isPaid': true,
+    // Add any other data you want to send
+  };
+  const paymentForm = document.getElementById('paymentForm');
+  paymentForm.addEventListener("submit", payWithPaystack, false);
+
+  function payWithPaystack(e) {
+    e.preventDefault();
+
+    let handler = PaystackPop.setup({
+      key: 'pk_test_a68698df82a346406fe8498e23f24a9a272da2a1', // Replace with your public key
+      email: '{{ email }}',
+      amount: {{ price }} * 100,
+      ref: '' + Math.floor((Math.random() * 1000000000) + 1), // generates a pseudo-unique reference. Please replace with a reference you generated. Or remove the line entirely so our API will generate one for you
+      // label: "Optional string that replaces customer email"
+      onClose: function () {
+        alert('Window closed.');
+      },
+      callback: function (response) {
+         let message = 'Payment complete! Reference: ' + response.reference;
+         window.location.href = '/payment-confirmation/' + '{{pk}}'
+        // alert(message);
+         
+      }
+    });
+
+    handler.openIframe();
+  } 
+
+</script>
+{% endblock content %}

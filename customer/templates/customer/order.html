@@ -1,0 +1,203 @@
+{% extends 'customer/base.html' %}
+
+{% block content %}
+<div class="container mb-5">
+    <div class="row justify-content-center mt-1">
+        <div class="col-md-12 col-sm-12 p-4">
+            <form method="POST">
+                {% csrf_token %}
+                <fieldset>
+                <div class="pt-5">
+                    {% for app in appetizers %}
+                    <div class="row">
+                        <div class="col-md-2 col-sm-12">
+                            <img class="rounded" src="{{ app.image.url }}" width="150" height="100" />
+                        </div>
+                        <div class="col-md-8 col-sm-12">
+                            <div class="d-flex flex-row">
+                                <div class="form-group form-check">
+                                    <input type="checkbox" name="items[]" class="form-check-input" value="{{ app.pk }}">
+                                    <label class="form-check-label">{{ app.name }}</label>                                    
+                                </div>
+                                <p class="font-weight-bold pl-5">{{ app.price }}</p>
+                                <label class="ml-5 no_of_items" style="display: none;">
+                                    Number of Items <input class="form-control" type="number" name="number_of_items" min="1"
+                                    max="100">
+                                </label>
+                            </div>
+                            <p>{{ app.description }}</p>
+                        </div>
+                    </div>
+                    <hr />
+                    {% endfor %}
+                </div>
+
+                <div class="pt-5">
+                    {% for entre in entrees %}
+                    <div class="row mt-4">
+                        <div class="col-md-2 col-sm-12">
+                            <img class="rounded" src="{{ entre.image.url }}" width="150" height="100" />
+                        </div>
+                        <div class="col-md-8 col-sm-12">
+                            <div class="d-flex flex-row">
+                                <div class="form-group form-check">
+                                    <input type="checkbox" name="items[]" class="form-check-input"
+                                        value="{{ entre.pk }}">
+                                    <label class="form-check-label">{{ entre.name }}</label>
+                                </div>
+                                <p class="font-weight-bold pl-5">{{ entre.price }}</p>
+                                <label class="ml-5 no_of_items" style="display: none;">
+                                    Number of Items <input class="form-control" type="number" name="number_of_items" min="1"
+                                    max="100">
+                                </label>
+                            </div>
+                            <p>{{ entre.description }}</p>
+                        </div>
+                    </div>
+                    <hr />
+                    {% endfor %}
+                </div>
+
+                <div class="pt-5">
+                    {% for dessert in desserts %}
+                    <div class="row mt-4">
+                        <div class="col-md-2 col-sm-12">
+                            <img class="rounded" src="{{ dessert.image.url }}" width="150" height="100" />
+                        </div>
+                        <div class="col-md-8 col-sm-12">
+                            <div class="d-flex flex-row">
+                                <div class="form-group form-check">
+                                    <input type="checkbox" name="items[]" class="form-check-input"
+                                        value="{{ dessert.pk }}">
+                                    <label class="form-check-label">{{ dessert.name }}</label>
+                                </div>
+                                <p class="font-weight-bold pl-5">{{ dessert.price }}</p>
+                                <label class="ml-5 no_of_items" style="display: none;">
+                                    Number of Items <input class="form-control" type="number" name="number_of_items" min="1"
+                                    max="100">
+                                </label>
+                            </div>
+                            <p>{{ dessert.description }}</p>
+                        </div>
+                    </div>
+                    <hr />
+                    {% endfor %}
+                </div>
+
+                <div class="pt-5">
+                    {% for drink in drinks %}
+                    <div class="row mt-4">
+                        <div class="col-md-2 col-sm-12">
+                            <img class="rounded" src="{{ drink.image.url }}" width="150" height="100" />
+                        </div>
+                        <div class="col-md-8 col-sm-12">
+                            <div class="d-flex flex-row">
+                                <div class="form-group form-check">
+                                    <input type="checkbox" name="items[]" class="form-check-input"
+                                        value="{{ drink.pk }}">
+                                    <label class="form-check-label">{{ drink.name }}</label>
+                                </div>
+                                <p class="font-weight-bold pl-5">{{ drink.price }}</p>
+                                <label class="ml-5 no_of_items" style="display: none;">
+                                    Number of Items <input class="form-control" type="number" name="number_of_items" min="1"
+                                    max="100">
+                                </label>
+                            </div>
+                            <p>{{ drink.description }}</p>
+                        </div>
+                    </div>
+                    <hr />
+                    {% endfor %}
+                </div>
+
+                <div class="row">
+                    <div class="col-md-4 col-sm-12">
+                        <div class="form-group pt-3">
+                            <label for="name">Full Name</label>
+                            <input type="text" required class="form-control" type="text" placeholder="Your Name"
+                                name="name" />
+                        </div>
+                    </div>
+
+                    <div class="col-md-4 col-sm-12">
+                        <div class="form-group pt-3">
+                            <label for="name">Email Address</label>
+                            <input type="text" required class="form-control" type="email" placeholder="you@example.com"
+                                name="email" />
+                        </div>
+                    </div>
+
+                    <div class="col-md-4 col-sm-12">
+                        <div class="form-group pt-3">
+                            <label for="name">Table / Physical Address</Address></label>
+                            <input type="text" required class="form-control" type="text" placeholder="" name="table" />
+                        </div>
+                    </div>
+                </div>
+
+                <!-- <button class="btn btn-dark mt-5">Place Order!</button> -->
+
+                <!-- Button to Open the Modal -->
+                <button type="button" class="btn btn-dark" data-toggle="modal" data-target="#submitModal">
+                    Submit Order!
+                </button>
+
+                <!-- The Modal -->
+                <div class="modal fade" id="submitModal" tabindex="-1" aria-labelledby="submitModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title" id="submitModalLabel">Submit Your Order</h5>
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
+                        <!-- <div class="modal-body">
+                          ...
+                        </div> -->
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary" data-dismiss="modal">Go Back</button>
+                          <button type="submit" class="btn btn-primary">Place Order!</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+            </form>
+        </div>
+    </div>
+</div>
+    
+    <label for="checkbox1">Checkbox 1</label>
+    <input type="checkbox" id="checkbox1">
+    <div id="textBox1" style="display: none;">
+        <input type="text" placeholder="Enter text for Checkbox 1">
+    </div>
+
+    <label for="checkbox2">Checkbox 2</label>
+    <input type="checkbox" id="checkbox2">
+    <div id="textBox2" style="display: none;">
+        <input type="text" placeholder="Enter text for Checkbox 2">
+    </div>
+
+    <label for="checkbox3">Checkbox 3</label>
+    <input type="checkbox" id="checkbox3">
+    <div id="textBox3" style="display: none;">
+        <input type="text" placeholder="Enter text for Checkbox 3">
+    </div>
+
+    <script>
+        // Get references to the checkboxes and text boxes
+        const checkboxes = document.querySelectorAll('input[type="checkbox"]');
+        const numberBoxes = document.querySelectorAll('.no_of_items');
+
+        // Add a click event listener to each checkbox
+        checkboxes.forEach((checkbox, index) => {
+            checkbox.addEventListener("click", function() {
+                // Toggle the display of the corresponding text box based on the checkbox state
+                numberBoxes[index].style.display = checkbox.checked ? "block" : "none";
+            });
+        });
+    </script>
+
+
+{% endblock content %}
